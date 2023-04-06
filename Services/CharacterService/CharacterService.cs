@@ -10,25 +10,37 @@ public class CharacterService : ICharacterService
         new Character { Id = 1, Name = "Sam" }
     };
 
-    public async Task<List<Character>> GetAllCharacters()
+    public async Task<ServiceResponse<List<Character>>> GetAllCharacters()
     {
-        return _characters;
-    }
-
-    public async Task<Character> GetCharacterById(int id)
-    {
-        var character = _characters.FirstOrDefault(c => c.Id == id);
-        if (character is not null)
+        var res = new ServiceResponse<List<Character>>
         {
-            return character;
-        }
-
-        throw new Exception("Character does not exist!");
+            Data = _characters,
+            Success = true,
+            Message = "Complete"
+        };
+        return res;
     }
 
-    public async Task<List<Character>> AddCharacter(Character character)
+    public async Task<ServiceResponse<Character>> GetCharacterById(int id)
+    {
+        var res = new ServiceResponse<Character>();
+        var character = _characters.FirstOrDefault(c => c.Id == id);
+
+        res.Data = character;
+        return res;
+    }
+
+    public async Task<ServiceResponse<List<Character>>> AddCharacter(Character character)
     {
         _characters.Add(character);
-        return _characters;
+        var res = new ServiceResponse<List<Character>>
+        {
+            Data = _characters,
+            Success = true,
+            Message = "Complete"
+        };
+
+
+        return res;
     }
 }
