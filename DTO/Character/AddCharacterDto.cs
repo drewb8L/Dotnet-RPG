@@ -1,6 +1,6 @@
 namespace Dotnet_RPG.DTO.Character;
 
-public class SendCharacterDto
+public class AddCharacterDto
 {
     public string Name { get; set; } = "Frodo";
     public int HiPoints { get; set; } = 100;

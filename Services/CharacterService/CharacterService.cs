@@ -1,3 +1,4 @@
+using AutoMapper;
 using Dotnet_RPG.DTO.Character;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -5,6 +6,13 @@ namespace Dotnet_RPG.Services.CharacterService;
 
 public class CharacterService : ICharacterService
 {
+    private readonly IMapper _mapper;
+
+    public CharacterService(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     private static List<Character> _characters = new()
     {
         new Character(),
@@ -15,10 +23,10 @@ public class CharacterService : ICharacterService
     {
         var res = new ServiceResponse<List<GetCharacterResponseDto>>
         {
-            Data = _characters,
-            Success = true,
-            Message = "Complete"
+            // Object initializer version
+            Data = _characters.Select(c => _mapper.Map<GetCharacterResponseDto>(c)).ToList()
         };
+
         return res;
     }
 
@@ -27,21 +35,22 @@ public class CharacterService : ICharacterService
         var res = new ServiceResponse<GetCharacterResponseDto>();
         var character = _characters.FirstOrDefault(c => c.Id == id);
 
-        res.Data = character;
+        res.Data = _mapper.Map<GetCharacterResponseDto>(character);
         return res;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(SendCharacterDto character)
+    public Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(Character character)
     {
-        _characters.Add(character);
-        var res = new ServiceResponse<List<GetCharacterResponseDto>>
-        {
-            Data = _characters,
-            Success = true,
-            Message = "Complete"
-        };
+        throw new NotImplementedException();
+    }
 
-
+    public async Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(AddCharacterDto character)
+    {
+        var newCharacter = _mapper.Map<Character>(character);
+        newCharacter.Id = _characters.Max(c => c.Id) + 1;
+        _characters.Add(newCharacter);
+        var res = new ServiceResponse<List<GetCharacterResponseDto>>();
+        res.Data = _characters.Select(c => _mapper.Map<GetCharacterResponseDto>(c)).ToList();
         return res;
     }
 }
