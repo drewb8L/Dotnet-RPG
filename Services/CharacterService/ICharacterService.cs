@@ -1,8 +1,10 @@
+using Dotnet_RPG.DTO.Character;
+
 namespace Dotnet_RPG.Services.CharacterService;
 
 public interface ICharacterService
 {
-   Task<ServiceResponse<List<Character>>> GetAllCharacters();
-    Task<ServiceResponse<Character>> GetCharacterById(int id);
-    Task<ServiceResponse<List<Character>>> AddCharacter(Character character);
+   Task<ServiceResponse<List<GetCharacterResponseDto>>> GetAllCharacters();
+    Task<ServiceResponse<GetCharacterResponseDto>> GetCharacterById(int id);
+    Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(Character character);
 }
