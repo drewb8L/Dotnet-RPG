@@ -39,10 +39,6 @@ public class CharacterService : ICharacterService
         return res;
     }
 
-    public Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(Character character)
-    {
-        throw new NotImplementedException();
-    }
 
     public async Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(AddCharacterDto character)
     {
@@ -52,5 +48,35 @@ public class CharacterService : ICharacterService
         var res = new ServiceResponse<List<GetCharacterResponseDto>>();
         res.Data = _characters.Select(c => _mapper.Map<GetCharacterResponseDto>(c)).ToList();
         return res;
+    }
+
+    public async Task<ServiceResponse<GetCharacterResponseDto>> UpdateCharacter(UpdateCharacterDTO updatedCharacter)
+    {
+        var serviceResponse = new ServiceResponse<GetCharacterResponseDto>();
+        try
+        {
+            var character = _characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+            if (character is null)
+            {
+                throw new Exception($"Character with '{updatedCharacter.Id} is not found.");
+            }
+
+            character.Name = updatedCharacter.Name;
+            character.HiPoints = updatedCharacter.HiPoints;
+            character.Defense = updatedCharacter.Defense;
+            character.Strength = updatedCharacter.Strength;
+            character.Intelligence = updatedCharacter.Intelligence;
+            character.Class = updatedCharacter.Class;
+
+            serviceResponse.Data = _mapper.Map<GetCharacterResponseDto>(character);
+            serviceResponse.Message = "Updated successfully";
+        }
+        catch (Exception e)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = e.Message;
+        }
+
+        return serviceResponse;
     }
 }

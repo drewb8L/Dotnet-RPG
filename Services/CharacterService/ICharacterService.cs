@@ -7,4 +7,5 @@ public interface ICharacterService
    Task<ServiceResponse<List<GetCharacterResponseDto>>> GetAllCharacters();
     Task<ServiceResponse<GetCharacterResponseDto>> GetCharacterById(int id);
     Task<ServiceResponse<List<GetCharacterResponseDto>>> AddCharacter(AddCharacterDto character);
+    Task<ServiceResponse<GetCharacterResponseDto>> UpdateCharacter(UpdateCharacterDTO updatedCharacter);
 }
